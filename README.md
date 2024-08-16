@@ -1,5 +1,5 @@
 
-And other procedure is added in the pdf file shared in the repo
+Procedure to run the application shared on Text analyzer App.pdf ( in repo )
 postman collection also shared 
 
 
