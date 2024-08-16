@@ -1,0 +1,303 @@
+{
+	"info": {
+		"_postman_id": "18641ee0-7226-4edc-ac21-dc3fec9d1907",
+		"name": "text-anallyzer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27456613"
+	},
+	"item": [
+		{
+			"name": "add",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "4/0AcvDMrCLnvmvjJzs1Al8ifJ0Rsw69QE90NpSIxbdkIIGnC5I_oz89_cCtrKbI3QgJCn87Q",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"content\": \"Hello every one. How is going everything.I am going for a outing.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/text",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"text"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "word count",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "4/0AcvDMrCLnvmvjJzs1Al8ifJ0Rsw69QE90NpSIxbdkIIGnC5I_oz89_cCtrKbI3QgJCn87Q",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/text/66be1c047fba39d8a67fefbc/word-count",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"text",
+						"66be1c047fba39d8a67fefbc",
+						"word-count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "char count",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "4/0AcvDMrCLnvmvjJzs1Al8ifJ0Rsw69QE90NpSIxbdkIIGnC5I_oz89_cCtrKbI3QgJCn87Q",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/text/66bce2debf3b71f73b4aea78/char-count?",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"text",
+						"66bce2debf3b71f73b4aea78",
+						"char-count"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sentence count",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "4/0AcvDMrCLnvmvjJzs1Al8ifJ0Rsw69QE90NpSIxbdkIIGnC5I_oz89_cCtrKbI3QgJCn87Q",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/text/66bcd2edfea86d7145fd7c2e/sentence-count",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"text",
+						"66bcd2edfea86d7145fd7c2e",
+						"sentence-count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "paragraph count",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "4/0AcvDMrCLnvmvjJzs1Al8ifJ0Rsw69QE90NpSIxbdkIIGnC5I_oz89_cCtrKbI3QgJCn87Q",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/text/66bcd2b6fea86d7145fd7c29/paragraph-count",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"text",
+						"66bcd2b6fea86d7145fd7c29",
+						"paragraph-count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "longest word",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "4/0AcvDMrCLnvmvjJzs1Al8ifJ0Rsw69QE90NpSIxbdkIIGnC5I_oz89_cCtrKbI3QgJCn87Q",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/text/66be1c047fba39d8a67fefbc/longest-word",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"text",
+						"66be1c047fba39d8a67fefbc",
+						"longest-word"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get text by id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "4/0AcvDMrCLnvmvjJzs1Al8ifJ0Rsw69QE90NpSIxbdkIIGnC5I_oz89_cCtrKbI3QgJCn87Q",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/text/66bce2debf3b71f73b4aea78",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"text",
+						"66bce2debf3b71f73b4aea78"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete text",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "4/0AcvDMrCLnvmvjJzs1Al8ifJ0Rsw69QE90NpSIxbdkIIGnC5I_oz89_cCtrKbI3QgJCn87Q",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/text/66bce2debf3b71f73b4aea78",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"text",
+						"66bce2debf3b71f73b4aea78"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update text",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "4/0AcvDMrCLnvmvjJzs1Al8ifJ0Rsw69QE90NpSIxbdkIIGnC5I_oz89_cCtrKbI3QgJCn87Q",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"66bce2debf3b71f73b4aea78\",\n    \"content\": \"updated content new\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/text?a",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"text"
+					],
+					"query": [
+						{
+							"key": "a",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "text list",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "4/0AcvDMrCLnvmvjJzs1Al8ifJ0Rsw69QE90NpSIxbdkIIGnC5I_oz89_cCtrKbI3QgJCn87Q",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/text/list",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"text",
+						"list"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

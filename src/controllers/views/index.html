@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.css" integrity="sha512-8BU3emz11z9iF75b10oPjjpamM4Mz23yQFQymbtwyPN3mNWHxpgeqyrYnkIUP6A8KyAj5k2p3MiYLtYqew7gIw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Text Analyzer</title>
+    <style>
+      .bg-blue {
+        background-color: #29b4cc;
+        padding: 78px 0;
+      }
+      .bg-gray {
+        background-color: #f6f6f6;
+        padding: 40px 0;
+      }
+      .list-group .scrollspy-link {
+        position: absolute;
+        top: 73px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 7px;
+      }
+      h4 {
+        color: #a7275c;
+      }
+      .list-group-item.active,
+      .list-group-item:hover {
+        color: #a7275c;
+        background-color: unset;
+        border-color: #a7275c;
+        border-left: 5px solid #a7275c;
+      }
+      .list-group-item:first-child {
+        border-top-left-radius: unset;
+        border-top-right-radius: unset;
+      }
+      .list-group-item:last-child {
+        border-bottom-right-radius: unset;
+        border-bottom-left-radius: unset;
+      }
+      .list-group-item {
+        border: unset;
+        position: relative;
+      }
+      .icon-wrapper {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: none;
+      }
+      .list-group-item:hover .icon-wrapper {
+        display: block;
+      }
+      .list-group-item .icon-wrapper i {
+        margin-left: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <div class="bg-blue"></div>
+      <div class="bg-gray">
+        <div class="container">
+          <div class="row">
+            <div class="col-4">
+              <section>
+                <form id="textForm">
+                  <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Enter Text</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-info mt-2">Submit</button>
+                </form>
+              </section>
+              <hr>
+              <div id="list-example" class="list-group"></div>
+            </div>
+            <div class="col-8">
+              <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
+                <div id="content-area"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check if the URL contains the authorization code
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        if (code) {
+          localStorage.setItem('authorization', code);
+          // Clear the query params from the URL after storing the code
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        // Redirect if no authorization code is found
+        const authorization = localStorage.getItem('authorization');
+        if (!authorization) {
+          window.location.href = 'http://localhost:3000/auth/o-auth';
+          return;
+        }
+
+        // Helper function to get headers
+        function getHeaders() {
+          return {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('authorization')}`
+          };
+        }
+
+        // Original script code
+        const listGroup = document.getElementById('list-example');
+        const contentArea = document.getElementById('content-area');
+        const textForm = document.getElementById('textForm');
+        const textarea = document.getElementById('exampleFormControlTextarea1');
+        let editMode = false;
+        let editId = null;
+
+        // Handle form submission
+        textForm.addEventListener('submit', function(event) {
+          event.preventDefault();
+          const content = textarea.value;
+
+          const url = editMode ? 'http://localhost:3000/api/text' : 'http://localhost:3000/api/text';
+          const method = editMode ? 'PUT' : 'POST';
+          const body = editMode ? JSON.stringify({ id: editId, content: content }) : JSON.stringify({ content: content });
+
+          fetch(url, {
+            method: method,
+            headers: getHeaders(),
+            body: body
+          })
+          .then(response => response.json())
+          .then(data => {
+            alert(editMode ? 'Text updated successfully!' : 'Text submitted successfully!');
+            textarea.value = ''; // Clear the textarea
+            editMode = false;
+            editId = null;
+            textForm.querySelector('button').textContent = 'Submit'; // Change button text back to 'Submit'
+            fetchTextList(); // Reload the text list
+          })
+          .catch(error => console.error('Error submitting text:', error));
+        });
+
+        // Fetch the list of texts from the API
+        function fetchTextList() {
+          fetch('http://localhost:3000/api/text/list', {
+            headers: getHeaders()
+          })
+            .then(response => response.json())
+            .then(data => {
+              const listItems = data.listText.map(item => `
+                <a href="#" class="list-group-item list-group-item-action" data-id="${item._id}">
+                  ${item.content.substring(0, 20)}...
+                  <span class="icon-wrapper">
+                    <i class="fas fa-pencil-alt" data-action="edit"></i>
+                    <i class="fas fa-trash" data-action="delete"></i>
+                  </span>
+                </a>
+              `).join('');
+              listGroup.innerHTML = listItems;
+
+              // Add click event listener to directly fetch and display analytics
+              listGroup.addEventListener('click', function(event) {
+                const target = event.target;
+                const id = target.closest('.list-group-item').getAttribute('data-id');
+                if (target.dataset.action === 'delete') {
+                  deleteText(id);
+                } else if (target.dataset.action === 'edit') {
+                  editText(id);
+                } else {
+                  fetchAnalyticsAndDisplay(id);
+                }
+              });
+            });
+        }
+
+        function deleteText(id) {
+          fetch(`http://localhost:3000/api/text/${id}`, {
+            method: 'DELETE',
+            headers: getHeaders()
+          })
+          .then(() => {
+            alert('Text deleted successfully!');
+            fetchTextList(); // Reload the text list
+          })
+          .catch(error => console.error('Error deleting text:', error));
+        }
+
+        function editText(id) {
+          fetch(`http://localhost:3000/api/text/${id}`, {
+            headers: getHeaders()
+          })
+            .then(response => response.json())
+            .then(data => {
+              textarea.value = data.listText.content; // Fill the textarea with old content
+              editMode = true;
+              editId = id;
+              textForm.querySelector('button').textContent = 'Update'; // Change button text to 'Update'
+            })
+            .catch(error => console.error('Error fetching text:', error));
+        }
+
+        function fetchAnalyticsAndDisplay(id) {
+          Promise.all([
+            fetch(`http://localhost:3000/api/text/${id}`, { headers: getHeaders() }).then(res => res.json()),
+            fetch(`http://localhost:3000/api/text/${id}/word-count`, { headers: getHeaders() }).then(res => res.json()),
+            fetch(`http://localhost:3000/api/text/${id}/char-count`, { headers: getHeaders() }).then(res => res.json()),
+            fetch(`http://localhost:3000/api/text/${id}/sentence-count`, { headers: getHeaders() }).then(res => res.json()),
+            fetch(`http://localhost:3000/api/text/${id}/paragraph-count`, { headers: getHeaders() }).then(res => res.json()),
+            fetch(`http://localhost:3000/api/text/${id}/longest-word`, { headers: getHeaders() }).then(res => res.json())
+          ])
+          .then(results => {
+            const [text, wordCount, charCount, sentenceCount, paragraphCount, longestWord] = results;
+            const content = `
+              <h4>Text Analytics</h4>
+              <p>${text.listText.content}</p>
+              <hr>
+              <p>Word Count: ${wordCount.wordCount}</p>
+              <p>Character Count: ${charCount.charCount}</p>
+              <p>Sentence Count: ${sentenceCount.sentenceCount}</p>
+              <p>Paragraph Count: ${paragraphCount.paragraphCount}</p>
+              <p>Longest Word: ${longestWord.longestWord}</p>
+            `;
+            contentArea.innerHTML = content;
+          })
+          .catch(error => console.error('Error fetching analytics:', error));
+        }
+
+        // Initial fetch of text list
+        fetchTextList();
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXlTF3T+JJ7j3s6Qf3GsIET9zOY3cA7B8F8L2SsU2rvx6j6czJX8+6xsPhHb" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhG+VY5KrAb8c+AB+MQTjq5n9qVp6Kq7lJOgibNbi04lUZCUJo7B3BiUhkDk" crossorigin="anonymous"></script>
+  </body>
+</html>
