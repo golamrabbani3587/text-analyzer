@@ -42,7 +42,9 @@ export class TextService {
     static async getSentenceCount(id: string) {
         const text = await Text.findById(id);
         if (!text) throw new Error('Text not found');
-        return text.content.split(/[.!?](\s|$)/).filter(Boolean).length;
+        const sentences = text.content.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
+    
+        return sentences.length;
     }
 
     static async getParagraphCount(id: string) {
